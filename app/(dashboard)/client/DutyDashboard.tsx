@@ -21,6 +21,21 @@ export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Ele
     queryFn: () => fetchDuties(clientId)
   });
 
+  async function fetchDuties(clientId: string): Promise<DutySummaryResponse> {
+    const response = await fetch(`/api/duties?clientId=${clientId}`, {
+      headers: {
+        "Accept": "application/json"
+      }, 
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to load duties");
+    }
+  
+    return response.json();
+  }
+  
   const mutation = useMutation({
     mutationFn: submitCompletion,
     onSuccess: async () => {
