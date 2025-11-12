@@ -1,4 +1,5 @@
 import { PrismaClient, DutyFrequency, DutyStatus, Role } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -12,11 +13,14 @@ async function main() {
     prisma.user.deleteMany(),
   ]);
 
+  const defaultPassword = await bcrypt.hash('demo-password', 12);
+
   const admin = await prisma.user.create({
     data: {
       email: 'admin@demo.local',
       name: 'Demo Admin',
       role: Role.ADMIN,
+      hashedPassword: defaultPassword,
     },
   });
 
@@ -25,6 +29,15 @@ async function main() {
       email: 'manager@demo.local',
       name: 'Demo Manager',
       role: Role.MANAGER,
+      hashedPassword: defaultPassword,
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: 'client@demo.local',
+      name: 'Demo Client',
+      role: Role.CLIENT,
     },
   });
 
