@@ -1,11 +1,6 @@
-import type { PropsWithChildren } from "react";
-
 import { cn } from "@/lib/utils";
 
-interface PageHeaderProps extends PropsWithChildren {
-  description?: string;
-  className?: string;
-}
+import type { PageHeaderProps } from "@/models/layout";
 
 export function PageHeader({ children, description, className }: PageHeaderProps): JSX.Element {
   return (

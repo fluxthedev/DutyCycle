@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 
-import {
-  DutyLifecycle,
-  DutyStatus,
-  getDutyStore,
-  recordDutyEvent
-} from "@/lib/duty-store";
+import { getDutyStore, recordDutyEvent } from "@/lib/duty-store";
+import type { DutyLifecycle, DutyStatus } from "@/models/duty";
+import type { DutyEventPayload } from "@/models/duty-events";
 
 const DUTY_STATUS_VALUES: DutyStatus[] = ["PENDING", "IN_PROGRESS", "COMPLETED"];
 const LIFECYCLE_VALUES: DutyLifecycle[] = ["ACTIVE", "ARCHIVED"];
@@ -16,15 +13,6 @@ function isDutyStatus(value: string | null): value is DutyStatus {
 
 function isLifecycle(value: string | null): value is DutyLifecycle {
   return value !== null && LIFECYCLE_VALUES.includes(value as DutyLifecycle);
-}
-
-interface DutyEventPayload {
-  dutyId: string;
-  status: DutyStatus;
-  clientId: string;
-  lifecycle: DutyLifecycle;
-  notes?: string;
-  attachmentName?: string;
 }
 
 async function parsePayload(request: Request): Promise<DutyEventPayload> {

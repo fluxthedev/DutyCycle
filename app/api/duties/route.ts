@@ -1,35 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  DutyLifecycle,
-  DutyRecord,
-  DutyStatus,
-  getDefaultClientId,
-  getDutiesForClient
-} from "@/lib/duty-store";
-
-interface DutyTimelineEntry {
-  id: string;
-  dutyId: string;
-  dutyTitle: string;
-  message: string;
-  createdAt: string;
-  status: DutyStatus;
-  lifecycle: DutyLifecycle;
-}
-
-interface DutySummary {
-  clientId: string;
-  weekRange: { start: string; end: string };
-  active: DutyRecord[];
-  archived: DutyRecord[];
-  timeline: DutyTimelineEntry[];
-  totals: {
-    pending: number;
-    inProgress: number;
-    completed: number;
-  };
-}
+import { getDefaultClientId, getDutiesForClient } from "@/lib/duty-store";
+import type { DutySummary, DutyTimelineEntry } from "@/models/duty-summary";
 
 function getWeekRange(date: Date): { start: string; end: string } {
   const start = new Date(date);

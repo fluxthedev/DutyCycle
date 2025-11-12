@@ -1,10 +1,6 @@
-import type { PropsWithChildren } from "react";
-
 import { cn } from "@/lib/utils";
 
-interface DashboardShellProps extends PropsWithChildren {
-  className?: string;
-}
+import type { DashboardShellProps } from "@/models/layout";
 
 export function DashboardShell({ children, className }: DashboardShellProps): JSX.Element {
   return <section className={cn("grid gap-6", className)}>{children}</section>;

@@ -1,10 +1,7 @@
 import type { KPI } from "@/lib/schemas/dashboard";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface KPIGridProps {
-  items: KPI[];
-}
+import type { KPIGridProps } from "@/models/dashboard";
 
 function formatValue(kpi: KPI): string {
   switch (kpi.format) {

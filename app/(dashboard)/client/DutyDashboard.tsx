@@ -1,55 +1,15 @@
 // app/(dashboard)/client/DutyDashboard.tsx
 "use client";
 
-import { useCallback, useMemo, useState} from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { ArrowDownToLine, CheckCircle2, CloudDownload, FileText, RotateCcw, Upload } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
-
-interface DutyDashboardProps {
-  clientId: string;
-}
-
-interface DutyTimelineEntry {
-  id: string;
-  dutyId: string;
-  dutyTitle: string;
-  message: string;
-  createdAt: string;
-  status: DutyStatus;
-  lifecycle: DutyLifecycle;
-}
-
-interface DutySummaryResponse {
-  clientId: string;
-  weekRange: { start: string; end: string };
-  active: DutyRecord[];
-  archived: DutyRecord[];
-  timeline: DutyTimelineEntry[];
-  totals: {
-    pending: number;
-    inProgress: number;
-    completed: number;
-  };
-}
-
-interface DownloadControlsProps {
-  clientId: string;
-  lifecycle: DutyLifecycle;
-}
-
-interface CompletionPayload {
-  dutyId: string;
-  status: DutyStatus;
-  clientId: string;
-  lifecycle: DutyLifecycle;
-  notes?: string;
-  attachment?: File | null;
-  notes?: string;              // Optional notes field
-  attachment: File | null;      // The uploaded file object
-}
+import type { DutyLifecycle, DutyStatus } from "@/models/duty";
+import type { DutyCompletionPayload } from "@/models/duty-events";
+import type { DutyCardProps, DutyDashboardProps, DownloadControlsProps, DutiesQueryResult } from "@/models/dashboard";
 
 async function downloadDutyLogs(clientId: string, lifecycle: DutyLifecycle, format: "csv" | "json"): Promise<void> {
   const url = new URL(`/api/duty-logs`, window.location.origin);
@@ -98,10 +58,6 @@ function DownloadControls({ clientId, lifecycle }: DownloadControlsProps): JSX.E
       </Button>
     </div>
   );
-}
-
-interface DutyDashboardProps {
-  clientId: string;
 }
 
 function DutyCard({ duty, clientId, lifecycle, onSubmit, isMutating }: DutyCardProps): JSX.Element {
@@ -234,15 +190,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit"
 });
 
-interface DutyCardProps {
-  duty: DutyRecord;
-  clientId: string;
-  lifecycle: DutyLifecycle;
-  onSubmit: (payload: CompletionPayload) => Promise<void>;
-  isMutating: boolean;
-}
-
-async function submitCompletion(payload: CompletionPayload): Promise<void> {
+async function submitCompletion(payload: DutyCompletionPayload): Promise<void> {
   const ensureOk = async (response: Response): Promise<void> => {
     if (!response.ok) {
       const message = await response
@@ -297,19 +245,20 @@ export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Ele
     queryFn: () => fetchDuties(clientId)
   });
 
-  async function fetchDuties(clientId: string): Promise<DutySummaryResponse> {
+  async function fetchDuties(clientId: string): Promise<DutiesQueryResult> {
     const response = await fetch(`/api/duties?clientId=${clientId}`, {
       headers: {
         "Accept": "application/json"
-      }, 
+      },
       cache: "no-store"
     });
 
     if (!response.ok) {
       throw new Error("Unable to load duties");
     }
-  
-    return response.json();
+
+    const payload = (await response.json()) as DutiesQueryResult;
+    return payload;
   }
   
   const mutation = useMutation({
@@ -330,7 +279,7 @@ export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Ele
   const weekLabel = data ? `${dateFormatter.format(new Date(data.weekRange.start))} – ${dateFormatter.format(new Date(data.weekRange.end))}` : "";
 
   const handleSubmit = useCallback(
-    async (payload: CompletionPayload) => {
+    async (payload: DutyCompletionPayload) => {
       await mutation.mutateAsync(payload);
     },
     [mutation]
