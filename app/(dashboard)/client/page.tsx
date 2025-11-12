@@ -10,33 +10,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
 
-interface DownloadControlsProps {
-  clientId: string;
-  lifecycle: DutyLifecycle;
-}
-
-async function downloadDutyLogs(clientId: string, lifecycle: DutyLifecycle, format: "csv" | "json"): Promise<void> {
-  const url = new URL(`/api/duty-logs`, window.location.origin);
-  url.searchParams.set("clientId", clientId);
-  url.searchParams.set("lifecycle", lifecycle);
-  url.searchParams.set("format", format);
-
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    throw new Error("Unable to download logs");
-  }
-
-  const blob = await response.blob();
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `duty-logs-${clientId}-${lifecycle}.${format}`;
-  link.rel = "noopener";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(link.href);
-}
-
 function DownloadControls({ clientId, lifecycle }: DownloadControlsProps): JSX.Element {
   const [busy, setBusy] = useState(false);
   const handleDownload = useCallback(
