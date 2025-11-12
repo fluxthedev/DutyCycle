@@ -1,9 +1,15 @@
 import "@testing-library/jest-dom/vitest";
 
-// Polyfill Next.js router helpers when needed.
-import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { afterAll, afterEach, beforeAll } from "vitest";
+
+import { server } from "@/tests/mocks/server";
+
+beforeAll(() => server.listen());
 
 afterEach(() => {
+  server.resetHandlers();
   cleanup();
 });
+
+afterAll(() => server.close());
