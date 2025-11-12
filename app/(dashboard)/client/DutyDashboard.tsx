@@ -4,6 +4,7 @@
 import { useCallback, useMemo, useState} from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { RotateCcw, CheckCircle2, Upload, FileText } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
 // ...other imports used by the component...
