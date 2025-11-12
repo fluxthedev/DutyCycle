@@ -1,4 +1,4 @@
-"use client";
+no"use client";
 
 import { useCallback, useMemo, useState } from "react";
 
@@ -9,16 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
-
-interface DutyTimelineEntry {
-  id: string;
-  dutyId: string;
-  dutyTitle: string;
-  message: string;
-  createdAt: string;
-  status: DutyStatus;
-  lifecycle: DutyLifecycle;
-}
 
 interface CompletionPayload {
   dutyId: string;
