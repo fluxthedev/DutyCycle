@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [{ "name": "next" }],
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "types": ["next-auth", "next-auth/jwt", "vitest/globals", "@testing-library/jest-dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
