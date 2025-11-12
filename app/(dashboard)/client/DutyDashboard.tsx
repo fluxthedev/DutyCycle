@@ -12,6 +12,16 @@ interface DutyDashboardProps {
   clientId: string;
 }
 
+interface DutyTimelineEntry {
+  id: string;
+  dutyId: string;
+  dutyTitle: string;
+  message: string;
+  createdAt: string;
+  status: DutyStatus;
+  lifecycle: DutyLifecycle;
+}
+
 interface DutySummaryResponse {
   clientId: string;
   weekRange: { start: string; end: string };
