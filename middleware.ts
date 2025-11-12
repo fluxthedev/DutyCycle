@@ -5,7 +5,16 @@ import type { NextRequestWithAuth } from "next-auth/middleware";
 import type { AppUserRole } from "@/lib/auth/roles";
 import { hasRequiredRole } from "@/lib/auth/roles";
 
-const DASHBOARD_PREFIXES = ["/dashboard", "/clients", "/duties", "/notifications", "/settings", "/reports"];
+const DASHBOARD_PREFIXES = [
+  "/dashboard",
+  "/clients",
+  "/duties",
+  "/notifications",
+  "/settings",
+  "/reports",
+  "/admin",
+  "/manager",
+];
 
 const ROLE_RULES: Array<{ pattern: RegExp; roles: AppUserRole[] }> = [
   { pattern: /^\/admin(\/|$)/, roles: ["ADMIN"] },
