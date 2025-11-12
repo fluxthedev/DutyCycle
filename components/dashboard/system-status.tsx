@@ -5,16 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface StatusResponse {
-  status: "operational" | "degraded" | "outage";
-  updatedAt: string;
-}
+import type { SystemStatusProps, SystemStatusResponse } from "@/models/dashboard";
 
-interface SystemStatusProps {
-  className?: string;
-}
-
-async function fetchSystemStatus(): Promise<StatusResponse> {
+async function fetchSystemStatus(): Promise<SystemStatusResponse> {
   // In production this would call a remote API. We simulate latency for demo purposes.
   await new Promise((resolve) => setTimeout(resolve, 100));
   return {

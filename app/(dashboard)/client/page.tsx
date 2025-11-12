@@ -6,3 +6,5 @@ export default function ClientPage(): JSX.Element {
   const defaultClient = "acme-co";
   return <DutyDashboard clientId={defaultClient} />;
 }
+
+export { DutyDashboard };

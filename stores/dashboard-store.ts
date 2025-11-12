@@ -1,10 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist, type StateStorage } from "zustand/middleware";
 
-interface DashboardState {
-  isSidebarOpen: boolean;
-  toggleSidebar: () => void;
-}
+import type { DashboardPreferencesState } from "@/models/dashboard-store";
 
 const noopStorage: StateStorage = {
   getItem: () => null,
@@ -12,7 +9,7 @@ const noopStorage: StateStorage = {
   removeItem: () => undefined
 };
 
-export const useDashboardStore = create<DashboardState>()(
+export const useDashboardStore = create<DashboardPreferencesState>()(
   persist(
     (set) => ({
       isSidebarOpen: true,
