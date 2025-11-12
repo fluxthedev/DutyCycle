@@ -157,4 +157,3 @@ export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Ele
     </div>
   );
 }
-}
