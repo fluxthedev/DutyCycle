@@ -45,6 +45,8 @@ interface CompletionPayload {
   status: DutyStatus;
   clientId: string;
   lifecycle: DutyLifecycle;
+  notes?: string;
+  attachment?: File | null;
   notes?: string;              // Optional notes field
   attachment: File | null;      // The uploaded file object
 }
