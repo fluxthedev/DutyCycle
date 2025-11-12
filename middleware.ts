@@ -47,6 +47,16 @@ const middleware = withAuth(
           return true;
         }
 
+        const allowedRoles = resolveRoleAccess(pathname);
+        if (allowedRoles) {
+          if (!token) {
+            return false;
+          }
+
+          const role = token.role as AppUserRole | undefined;
+          return hasRequiredRole(role, allowedRoles);
+        }
+
         if (!isDashboardRoute(pathname)) {
           return true;
         }
@@ -56,11 +66,6 @@ const middleware = withAuth(
         }
 
         const role = token.role as AppUserRole | undefined;
-
-        const allowedRoles = resolveRoleAccess(pathname);
-        if (allowedRoles) {
-          return hasRequiredRole(role, allowedRoles);
-        }
 
         return Boolean(role);
       },
