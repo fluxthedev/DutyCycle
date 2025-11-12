@@ -41,6 +41,15 @@ interface DownloadControlsProps {
   lifecycle: DutyLifecycle;
 }
 
+interface CompletionPayload {
+  dutyId: string;
+  status: DutyStatus;
+  clientId: string;
+  lifecycle: DutyLifecycle;
+  notes?: string;              // Optional notes field
+  attachment: File | null;      // The uploaded file object
+}
+
 async function downloadDutyLogs(clientId: string, lifecycle: DutyLifecycle, format: "csv" | "json"): Promise<void> {
   const url = new URL(`/api/duty-logs`, window.location.origin);
   url.searchParams.set("clientId", clientId);
