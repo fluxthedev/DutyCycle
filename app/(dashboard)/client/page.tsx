@@ -10,8 +10,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
 
-
-
 interface DownloadControlsProps {
   clientId: string;
   lifecycle: DutyLifecycle;
