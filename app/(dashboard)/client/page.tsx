@@ -10,13 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
 
-interface DutyCardProps {
-  duty: DutyRecord;
-  clientId: string;
-  lifecycle: DutyLifecycle;
-  onSubmit: (payload: CompletionPayload) => Promise<void>;
-  isMutating: boolean;
-}
+
 
 interface DownloadControlsProps {
   clientId: string;
