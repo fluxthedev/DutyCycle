@@ -297,7 +297,7 @@ interface DutyDashboardProps {
   clientId: string;
 }
 
-function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Element {
+export function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Element {
   const queryClient = useQueryClient();
   const [view, setView] = useState<DutyLifecycle>("ACTIVE");
 
