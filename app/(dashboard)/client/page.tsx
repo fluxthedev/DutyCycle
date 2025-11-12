@@ -54,21 +54,6 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit"
 });
 
-async function fetchDuties(clientId: string): Promise<DutySummaryResponse> {
-  const response = await fetch(`/api/duties?clientId=${clientId}`, {
-    headers: {
-      "Accept": "application/json"
-    },
-    cache: "no-store"
-  });
-
-  if (!response.ok) {
-    throw new Error("Unable to load duties");
-  }
-
-  return response.json();
-}
-
 async function submitCompletion(payload: CompletionPayload): Promise<void> {
   const ensureOk = async (response: Response): Promise<void> => {
     if (!response.ok) {
