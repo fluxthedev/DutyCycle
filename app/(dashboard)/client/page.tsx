@@ -20,19 +20,6 @@ interface DutyTimelineEntry {
   lifecycle: DutyLifecycle;
 }
 
-interface DutySummaryResponse {
-  clientId: string;
-  weekRange: { start: string; end: string };
-  active: DutyRecord[];
-  archived: DutyRecord[];
-  timeline: DutyTimelineEntry[];
-  totals: {
-    pending: number;
-    inProgress: number;
-    completed: number;
-  };
-}
-
 interface CompletionPayload {
   dutyId: string;
   status: DutyStatus;
@@ -53,52 +40,6 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
   hour: "numeric",
   minute: "2-digit"
 });
-
-async function submitCompletion(payload: CompletionPayload): Promise<void> {
-  const ensureOk = async (response: Response): Promise<void> => {
-    if (!response.ok) {
-      const message = await response
-        .json()
-        .catch(() => ({ error: "Unable to update duty" }));
-      throw new Error(message.error ?? "Unable to update duty");
-    }
-  };
-
-  if (payload.attachment) {
-    const formData = new FormData();
-    formData.append("dutyId", payload.dutyId);
-    formData.append("status", payload.status);
-    formData.append("clientId", payload.clientId);
-    formData.append("lifecycle", payload.lifecycle);
-    if (payload.notes) {
-      formData.append("notes", payload.notes);
-    }
-    formData.append("attachment", payload.attachment);
-
-    const response = await fetch("/api/duty-events", {
-      method: "POST",
-      body: formData
-    });
-    await ensureOk(response);
-    return;
-  }
-
-  const response = await fetch("/api/duty-events", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({
-      dutyId: payload.dutyId,
-      status: payload.status,
-      clientId: payload.clientId,
-      lifecycle: payload.lifecycle,
-      notes: payload.notes ?? undefined
-    })
-  });
-  await ensureOk(response);
-}
 
 interface DutyCardProps {
   duty: DutyRecord;
