@@ -8,7 +8,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "DutyCycle Dashboard",
-  description: "Starter dashboard scaffold with Next.js 14"
+  description: "Starter dashboard scaffold with Next.js 14",
+  manifest: "/manifest.json"
 };
 
 export default function RootLayout({
