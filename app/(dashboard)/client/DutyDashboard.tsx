@@ -25,6 +25,52 @@ interface DutySummaryResponse {
   };
 }
 
+async function submitCompletion(payload: CompletionPayload): Promise<void> {
+  const ensureOk = async (response: Response): Promise<void> => {
+    if (!response.ok) {
+      const message = await response
+        .json()
+        .catch(() => ({ error: "Unable to update duty" }));
+      throw new Error(message.error ?? "Unable to update duty");
+    }
+  };
+
+  if (payload.attachment) {
+    const formData = new FormData();
+    formData.append("dutyId", payload.dutyId);
+    formData.append("status", payload.status);
+    formData.append("clientId", payload.clientId);
+    formData.append("lifecycle", payload.lifecycle);
+    if (payload.notes) {
+      formData.append("notes", payload.notes);
+    }
+    formData.append("attachment", payload.attachment);
+
+    const response = await fetch("/api/duty-events", {
+      method: "POST",
+      body: formData
+    });
+    await ensureOk(response);
+    return;
+  }
+
+  const response = await fetch("/api/duty-events", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      dutyId: payload.dutyId,
+      status: payload.status,
+      clientId: payload.clientId,
+      lifecycle: payload.lifecycle,
+      notes: payload.notes ?? undefined
+    })
+  });
+  await ensureOk(response);
+}
+
 export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Element {
   const queryClient = useQueryClient();
   const [view, setView] = useState<DutyLifecycle>("ACTIVE");
