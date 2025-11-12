@@ -58,7 +58,7 @@ async function fetchDuties(clientId: string): Promise<DutySummaryResponse> {
     headers: {
       "Accept": "application/json"
     },
-    cache: "force-cache"
+    cache: "no-store"
   });
 
   if (!response.ok) {
@@ -136,11 +136,13 @@ function DutyCard({ duty, clientId, lifecycle, onSubmit, isMutating }: DutyCardP
     (!hasAttachmentRequirement || Boolean(attachment)) && (!hasNotesRequirement || notes.trim().length > 0);
 
   const handleSubmit = async (): Promise<void> => {
+    const nextLifecycle: DutyLifecycle = nextStatus === "COMPLETED" ? "ARCHIVED" : "ACTIVE";
+
     await onSubmit({
       dutyId: duty.id,
       status: nextStatus,
       clientId,
-      lifecycle,
+      lifecycle: nextLifecycle,
       notes: notes.trim().length > 0 ? notes.trim() : undefined,
       attachment: isCompleted ? null : attachment
     });
