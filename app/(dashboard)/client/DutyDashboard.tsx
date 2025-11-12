@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { RotateCcw, CheckCircle2, Upload, FileText } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
-// ...other imports used by the component...
+import { ArrowDownToLine, CheckCircle2, CloudDownload, FileText, RotateCcw, Upload } from "lucide-react";
+import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface DutyDashboardProps {
   clientId: string;
