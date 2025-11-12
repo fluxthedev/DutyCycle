@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+enum DutyStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+enum DutyFrequency {
+  ONCE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  name           String
+  role           Role
+  duties         Duty[]          @relation("AssignedDuties")
+  notifications  Notification[]
+  dutyLogs       DutyLog[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Client {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  duties      Duty[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Duty {
+  id             Int             @id @default(autoincrement())
+  title          String
+  description    String?
+  frequency      DutyFrequency   @default(ONCE)
+  status         DutyStatus      @default(PENDING)
+  clientId       Int
+  assignedToId   Int?
+  client         Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  assignedTo     User?           @relation("AssignedDuties", fields: [assignedToId], references: [id], onDelete: SetNull)
+  events         DutyEvent[]
+  notifications  Notification[]
+  logs           DutyLog[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model DutyEvent {
+  id           Int        @id @default(autoincrement())
+  dutyId       Int
+  scheduledFor DateTime
+  completedAt  DateTime?
+  status       DutyStatus
+  notes        String?
+  duty         Duty       @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+}
+
+model Notification {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  dutyId    Int?
+  message   String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  duty      Duty?     @relation(fields: [dutyId], references: [id], onDelete: SetNull)
+}
+
+model DutyLog {
+  id        Int      @id @default(autoincrement())
+  dutyId    Int
+  actorId   Int?
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+  duty      Duty     @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+}

@@ -1,3 +1,6 @@
+# DutyCycle
+
+## Database setup
 # DutyCycle Dashboard
 
 A Next.js 14 App Router starter configured with Tailwind CSS, shadcn/ui primitives, Zustand state, TanStack Query data fetching, and a Vitest + Testing Library test harness.
@@ -8,6 +11,24 @@ A Next.js 14 App Router starter configured with Tailwind CSS, shadcn/ui primitiv
    ```bash
    npm install
    ```
+2. Copy the example environment file and adjust as needed:
+   ```bash
+   cp .env.example .env
+   ```
+   Ensure the SQLite connection string is set:
+   ```env
+   DATABASE_URL="file:./dev.db"
+   ```
+3. Run the initial migration and generate the Prisma client:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+4. Seed demo data (one admin, one manager, three clients, ten duties):
+   ```bash
+   npx prisma db seed
+   ```
+
+The Prisma schema, migrations, and seed script live in the `prisma/` directory.
 2. Start the development server:
    ```bash
    npm run dev
