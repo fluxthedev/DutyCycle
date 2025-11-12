@@ -1,4 +1,4 @@
-// app/(dashboard)/client/DutyDashboard.tsx
+i// app/(dashboard)/client/DutyDashboard.tsx
 "use client";
 
 import { useCallback, useMemo, useState} from "react";
@@ -33,6 +33,15 @@ interface DutySummaryResponse {
     inProgress: number;
     completed: number;
   };
+}
+
+interface CompletionPayload {
+  dutyId: string;
+  status: DutyStatus;
+  clientId: string;
+  lifecycle: DutyLifecycle;
+  notes?: string;
+  attachment?: File | null;
 }
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
