@@ -166,6 +166,14 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit"
 });
 
+interface DutyCardProps {
+  duty: DutyRecord;
+  clientId: string;
+  lifecycle: DutyLifecycle;
+  onSubmit: (payload: CompletionPayload) => Promise<void>;
+  isMutating: boolean;
+}
+
 async function submitCompletion(payload: CompletionPayload): Promise<void> {
   const ensureOk = async (response: Response): Promise<void> => {
     if (!response.ok) {
