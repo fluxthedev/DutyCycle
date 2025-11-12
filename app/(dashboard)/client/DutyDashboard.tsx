@@ -35,6 +35,18 @@ interface DutySummaryResponse {
   };
 }
 
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric"
+});
+
+const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit"
+});
+
 async function submitCompletion(payload: CompletionPayload): Promise<void> {
   const ensureOk = async (response: Response): Promise<void> => {
     if (!response.ok) {
