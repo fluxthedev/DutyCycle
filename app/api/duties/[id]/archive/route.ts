@@ -10,9 +10,24 @@ export async function POST(
 ): Promise<NextResponse> {
   const id = Number(params.id);
 
-  const duty = await prisma.duty.update({
-    where: { id },
-    data: { status: DutyStatus.COMPLETED }
+  const duty = await prisma.$transaction(async (tx) => {
+    const updatedDuty = await tx.duty.update({
+      where: { id },
+      data: { status: DutyStatus.COMPLETED }
+    });
+
+    await tx.dutyEvent.updateMany({
+      where: {
+        dutyId: id,
+        status: { in: [DutyStatus.PENDING, DutyStatus.IN_PROGRESS] }
+      },
+      data: {
+        status: DutyStatus.COMPLETED,
+        completedAt: new Date()
+      }
+    });
+
+    return updatedDuty;
   });
 
   const withRelations = await prisma.duty.findUniqueOrThrow({
