@@ -1,4 +1,4 @@
-import { PrismaClient, DutyFrequency, DutyStatus, Role } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -19,7 +19,7 @@ async function main() {
     data: {
       email: 'admin@demo.local',
       name: 'Demo Admin',
-      role: Role.ADMIN,
+      role: 'ADMIN',
       hashedPassword: defaultPassword,
     },
   });
@@ -28,7 +28,7 @@ async function main() {
     data: {
       email: 'manager@demo.local',
       name: 'Demo Manager',
-      role: Role.MANAGER,
+      role: 'MANAGER',
       hashedPassword: defaultPassword,
     },
   });
@@ -37,7 +37,7 @@ async function main() {
     data: {
       email: 'client@demo.local',
       name: 'Demo Client',
-      role: Role.CLIENT,
+      role: 'CLIENT',
     },
   });
 
@@ -57,52 +57,52 @@ async function main() {
     {
       title: 'Inspect safety equipment',
       description: 'Verify that all safety equipment is present and operational.',
-      frequency: DutyFrequency.WEEKLY,
+      frequency: 'WEEKLY',
     },
     {
       title: 'Clean common areas',
       description: 'Perform cleaning of lobbies and shared spaces.',
-      frequency: DutyFrequency.DAILY,
+      frequency: 'DAILY',
     },
     {
       title: 'Backup critical systems',
       description: 'Run and verify nightly data backup procedures.',
-      frequency: DutyFrequency.DAILY,
+      frequency: 'DAILY',
     },
     {
       title: 'Review incident reports',
       description: 'Analyze and summarize weekly incident reports.',
-      frequency: DutyFrequency.WEEKLY,
+      frequency: 'WEEKLY',
     },
     {
       title: 'Monthly compliance audit',
       description: 'Complete regulatory compliance checklist.',
-      frequency: DutyFrequency.MONTHLY,
+      frequency: 'MONTHLY',
     },
     {
       title: 'Inventory supplies',
       description: 'Check supply levels and reorder if necessary.',
-      frequency: DutyFrequency.WEEKLY,
+      frequency: 'WEEKLY',
     },
     {
       title: 'Equipment calibration',
       description: 'Calibrate measurement devices according to schedule.',
-      frequency: DutyFrequency.MONTHLY,
+      frequency: 'MONTHLY',
     },
     {
       title: 'Emergency drill coordination',
       description: 'Coordinate quarterly emergency response drill.',
-      frequency: DutyFrequency.MONTHLY,
+      frequency: 'MONTHLY',
     },
     {
       title: 'Client satisfaction survey',
       description: 'Collect and review client feedback for the period.',
-      frequency: DutyFrequency.MONTHLY,
+      frequency: 'MONTHLY',
     },
     {
       title: 'Policy review session',
       description: 'Review and update policy documentation.',
-      frequency: DutyFrequency.ONCE,
+      frequency: 'ONCE',
     },
   ];
 
@@ -117,14 +117,14 @@ async function main() {
         title: template.title,
         description: template.description,
         frequency: template.frequency,
-        status: i % 3 === 0 ? DutyStatus.IN_PROGRESS : DutyStatus.PENDING,
+        status: (i % 3 === 0 ? 'IN_PROGRESS' : 'PENDING'),
         client: { connect: { id: client.id } },
         assignedTo: { connect: { id: manager.id } },
         events: {
           create: [
             {
               scheduledFor: new Date(now.getTime() + i * 24 * 60 * 60 * 1000),
-              status: i % 4 === 0 ? DutyStatus.COMPLETED : DutyStatus.PENDING,
+              status: i % 4 === 0 ? 'COMPLETED' : 'PENDING',
               completedAt:
                 i % 4 === 0 ? new Date(now.getTime() + i * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000) : null,
               notes: i % 4 === 0 ? 'Completed as scheduled.' : null,

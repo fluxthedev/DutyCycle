@@ -28,24 +28,30 @@ export function useCurrentUser(): UseCurrentUserResult {
 
   const user = useMemo<CurrentUser | null>(() => {
     const sessionUser = data?.user;
-    if (!sessionUser?.email || !sessionUser.role) {
+    if (!sessionUser?.email) {
       return null;
     }
 
-    const permissions = derivePermissions(sessionUser.role);
+    const role = (sessionUser as { role?: AppUserRole | null | undefined }).role ?? null;
+    if (!role) {
+      return null;
+    }
 
+    const permissions = derivePermissions(role);
+
+    const idRaw = (sessionUser as { id?: number | string | null | undefined }).id;
     const idValue =
-      typeof sessionUser.id === "number"
-        ? sessionUser.id
-        : sessionUser.id !== undefined
-          ? Number(sessionUser.id)
+      typeof idRaw === "number"
+        ? idRaw
+        : idRaw !== undefined && idRaw !== null
+          ? Number(idRaw)
           : undefined;
 
     return {
       id: idValue ?? 0,
       name: sessionUser.name ?? null,
       email: sessionUser.email,
-      role: sessionUser.role,
+      role,
       permissions,
     };
   }, [data?.user]);

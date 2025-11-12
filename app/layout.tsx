@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./(dashboard)/globals.css";
 import { Providers } from "./providers";
 import { cn } from "@/lib/utils";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "DutyCycle Dashboard",
@@ -18,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en" className={cn("h-full", inter.variable)} suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans text-foreground antialiased", inter.className)}>
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className={cn("min-h-screen bg-background font-sans text-foreground antialiased")}> 
         <Providers>
           <div className="flex min-h-screen flex-col">
             <header className="border-b bg-card/40">

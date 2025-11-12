@@ -1,14 +1,16 @@
-import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 
+import type { JWT } from "next-auth/jwt";
+
 import { prisma } from "@/lib/prisma";
 import { prismaAdapter } from "@/lib/auth/prisma-adapter";
 import { derivePermissions } from "@/lib/auth/roles";
 import type { AppUserRole } from "@/lib/auth/roles";
-import { Role } from "@prisma/client";
+const allowedCredentialRoles: AppUserRole[] = ["ADMIN", "MANAGER"];
+const defaultRole: AppUserRole = "CLIENT";
 
 const emailFrom = process.env.EMAIL_FROM ?? "no-reply@dutycycle.local";
 
@@ -40,10 +42,10 @@ function buildEmailTransport() {
   return nodemailer.createTransport({ jsonTransport: true });
 }
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   adapter: prismaAdapter(prisma),
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -86,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        if (![Role.ADMIN, Role.MANAGER].includes(user.role)) {
+        if (!allowedCredentialRoles.includes(user.role as AppUserRole)) {
           return null;
         }
 
@@ -101,7 +103,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: { id?: unknown; role?: unknown } | null }) {
       if (user) {
         token.id = (user as any).id;
         token.role = (user as any).role as AppUserRole;
@@ -109,7 +111,21 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    async session({ session, token }) {
+    async session({
+      session,
+      token
+    }: {
+      session: {
+        user?: {
+          id?: unknown;
+          role?: unknown;
+          permissions?: unknown;
+          email?: string | null;
+          name?: string | null;
+        } | null;
+      } & Record<string, unknown>;
+      token: JWT;
+    }) {
       if (session.user) {
         const derivedId =
           typeof token.id === "number"
@@ -125,7 +141,7 @@ export const authOptions: NextAuthOptions = {
         const role =
           (token.role as AppUserRole | undefined) ??
           (session.user.role as AppUserRole | undefined) ??
-          (Role.CLIENT as AppUserRole);
+          defaultRole;
         session.user.role = role;
         session.user.permissions = derivePermissions(role);
       }
