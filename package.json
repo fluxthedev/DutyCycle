@@ -1,29 +1,5 @@
 {
   "name": "dutycycle",
-  "version": "1.0.0",
-  "description": "Duty management tooling",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc --noEmit",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "prisma db seed",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.14.0",
-    "prisma": "^5.14.0"
-  },
-  "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -35,27 +11,36 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "format": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed"
   },
   "dependencies": {
+    "@prisma/client": "^5.14.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@tanstack/react-query": "^5.51.2",
+    "@tanstack/react-query-devtools": "^5.51.2",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.379.0",
     "next": "^14.2.3",
+    "next-auth": "^4.24.7",
+    "nodemailer": "^6.9.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.4.0",
     "zustand": "^4.5.4",
-    "zod": "^3.23.8",
-    "@tanstack/react-query-devtools": "^5.51.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.11.30",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.12.0",
@@ -69,10 +54,11 @@
     "eslint-plugin-testing-library": "^6.2.2",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
     "prettier-plugin-tailwindcss": "^0.5.13",
-    "@vitejs/plugin-react-swc": "^3.7.0"
+    "prisma": "^5.14.0",
+    "tailwindcss": "^3.4.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   }
 }
