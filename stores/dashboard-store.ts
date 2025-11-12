@@ -1,10 +1,16 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { createJSONStorage, persist, type StateStorage } from "zustand/middleware";
 
 interface DashboardState {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
 }
+
+const noopStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => undefined,
+  removeItem: () => undefined
+};
 
 export const useDashboardStore = create<DashboardState>()(
   persist(
@@ -14,7 +20,7 @@ export const useDashboardStore = create<DashboardState>()(
     }),
     {
       name: "dashboard-preferences",
-      storage: createJSONStorage(() => (typeof window !== "undefined" ? window.localStorage : undefined))
+      storage: createJSONStorage(() => (typeof window !== "undefined" ? window.localStorage : noopStorage))
     }
   )
 );

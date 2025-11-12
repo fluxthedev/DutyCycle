@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowDownToLine, ArrowPath, CheckCircle2, CloudDownload, FileText, Upload } from "lucide-react";
+import { ArrowDownToLine, CheckCircle2, CloudDownload, FileText, RotateCcw, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -190,7 +190,7 @@ function DutyCard({ duty, clientId, lifecycle, onSubmit, isMutating }: DutyCardP
               disabled={isMutating || (!isCompleted && !canSubmit)}
               onClick={() => void handleSubmit()}
             >
-              <ArrowPath className="mr-2 h-4 w-4" />
+              <RotateCcw className="mr-2 h-4 w-4" />
               {isCompleted ? "Reopen duty" : "Mark complete"}
             </Button>
             <Button

@@ -46,12 +46,14 @@ async function parsePayload(request: Request): Promise<DutyEventPayload> {
       lifecycle: "ACTIVE"
     };
 
-    if (isDutyStatus(typeof status === "string" ? status : null)) {
-      payload.status = status;
+    const statusValue = typeof status === "string" ? status : null;
+    if (isDutyStatus(statusValue)) {
+      payload.status = statusValue;
     }
 
-    if (isLifecycle(typeof lifecycle === "string" ? lifecycle : null)) {
-      payload.lifecycle = lifecycle;
+    const lifecycleValue = typeof lifecycle === "string" ? lifecycle : null;
+    if (isLifecycle(lifecycleValue)) {
+      payload.lifecycle = lifecycleValue;
     }
 
     if (typeof notes === "string" && notes.trim().length > 0) {

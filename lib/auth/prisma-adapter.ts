@@ -3,24 +3,24 @@ import type { PrismaClient } from "@prisma/client";
 
 export function prismaAdapter(prisma: PrismaClient): Adapter {
   return {
-    createUser: async (data) => {
+    createUser: async (data: Parameters<NonNullable<Adapter["createUser"]>>[0]) => {
       return (await prisma.user.create({
         data: data as any,
       })) as any;
     },
-    getUser: async (id) => {
+    getUser: async (id: Parameters<NonNullable<Adapter["getUser"]>>[0]) => {
       if (!id) return null;
       return prisma.user.findUnique({
         where: { id: Number(id) },
       }) as any;
     },
-    getUserByEmail: async (email) => {
+    getUserByEmail: async (email: Parameters<NonNullable<Adapter["getUserByEmail"]>>[0]) => {
       if (!email) return null;
       return prisma.user.findUnique({
         where: { email },
       }) as any;
     },
-    getUserByAccount: async ({ provider, providerAccountId }) => {
+    getUserByAccount: async ({ provider, providerAccountId }: Parameters<NonNullable<Adapter["getUserByAccount"]>>[0]) => {
       const account = await prisma.account.findUnique({
         where: {
           provider_providerAccountId: {
@@ -34,7 +34,7 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
       if (!account) return null;
       return account.user as any;
     },
-    updateUser: async (data) => {
+    updateUser: async (data: Parameters<NonNullable<Adapter["updateUser"]>>[0]) => {
       if (!data.id) {
         throw new Error("User id is required to update user");
       }
@@ -45,17 +45,17 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
         data: rest as any,
       }) as any;
     },
-    deleteUser: async (id) => {
+    deleteUser: async (id: Parameters<NonNullable<Adapter["deleteUser"]>>[0]) => {
       if (!id) return null;
       return prisma.user.delete({
         where: { id: Number(id) },
       }) as any;
     },
-    linkAccount: async (data) =>
+    linkAccount: async (data: Parameters<NonNullable<Adapter["linkAccount"]>>[0]) =>
       (await prisma.account.create({
         data: data as any,
       })) as any,
-    unlinkAccount: async ({ provider, providerAccountId }) => {
+    unlinkAccount: async ({ provider, providerAccountId }: Parameters<NonNullable<Adapter["unlinkAccount"]>>[0]) => {
       try {
         await prisma.account.delete({
           where: {
@@ -69,11 +69,13 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
         return undefined;
       }
     },
-    createSession: async (data) =>
+    createSession: async (data: Parameters<NonNullable<Adapter["createSession"]>>[0]) =>
       (await prisma.session.create({
         data: data as any,
       })) as any,
-    getSessionAndUser: async (sessionToken) => {
+    getSessionAndUser: async (
+      sessionToken: Parameters<NonNullable<Adapter["getSessionAndUser"]>>[0]
+    ) => {
       const session = await prisma.session.findUnique({
         where: { sessionToken },
         include: { user: true },
@@ -83,7 +85,7 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
       const { user, ...sessionData } = session;
       return { session: sessionData as any, user: user as any };
     },
-    updateSession: async (data) => {
+    updateSession: async (data: Parameters<NonNullable<Adapter["updateSession"]>>[0]) => {
       const { sessionToken } = data;
       try {
         return (await prisma.session.update({
@@ -94,7 +96,7 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
         return null;
       }
     },
-    deleteSession: async (sessionToken) => {
+    deleteSession: async (sessionToken: Parameters<NonNullable<Adapter["deleteSession"]>>[0]) => {
       try {
         return (await prisma.session.delete({
           where: { sessionToken },
@@ -103,12 +105,17 @@ export function prismaAdapter(prisma: PrismaClient): Adapter {
         return null;
       }
     },
-    createVerificationToken: (data) => {
+    createVerificationToken: (
+      data: Parameters<NonNullable<Adapter["createVerificationToken"]>>[0]
+    ) => {
       return prisma.verificationToken.create({
         data: data as any,
       }) as any;
     },
-    useVerificationToken: async ({ identifier, token }) => {
+    useVerificationToken: async ({
+      identifier,
+      token
+    }: Parameters<NonNullable<Adapter["useVerificationToken"]>>[0]) => {
       try {
         return (await prisma.verificationToken.delete({
           where: { identifier_token: { identifier, token } },
