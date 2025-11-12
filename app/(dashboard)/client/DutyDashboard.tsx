@@ -12,6 +12,19 @@ interface DutyDashboardProps {
   clientId: string;
 }
 
+interface DutySummaryResponse {
+  clientId: string;
+  weekRange: { start: string; end: string };
+  active: DutyRecord[];
+  archived: DutyRecord[];
+  timeline: DutyTimelineEntry[];
+  totals: {
+    pending: number;
+    inProgress: number;
+    completed: number;
+  };
+}
+
 export default function DutyDashboard({ clientId }: DutyDashboardProps): JSX.Element {
   const queryClient = useQueryClient();
   const [view, setView] = useState<DutyLifecycle>("ACTIVE");
