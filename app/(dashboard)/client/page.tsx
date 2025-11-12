@@ -7,6 +7,7 @@ import { ArrowDownToLine, CheckCircle2, CloudDownload, FileText, RotateCcw, Uplo
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
 
 interface DutyTimelineEntry {
