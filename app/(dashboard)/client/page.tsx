@@ -1,4 +1,4 @@
-no"use client";
+"use client";
 
 import { useCallback, useMemo, useState } from "react";
 
@@ -9,27 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DutyDashboard from "./DutyDashboard";
 import type { DutyLifecycle, DutyRecord, DutyStatus } from "@/lib/duty-store";
-
-interface CompletionPayload {
-  dutyId: string;
-  status: DutyStatus;
-  clientId: string;
-  lifecycle: DutyLifecycle;
-  notes?: string;
-  attachment?: File | null;
-}
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric"
-});
-
-const timeFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  hour: "numeric",
-  minute: "2-digit"
-});
 
 interface DutyCardProps {
   duty: DutyRecord;
